@@ -34,12 +34,58 @@ export enum Role {
  */
 export enum Model {
   'gpt-3.5-turbo' = 'gpt-3.5-turbo',
-  'gpt-3.5-turbo-0301' = 'gpt-3.5-turbo-0301',
+  'gpt-3.5-turbo-0613' = 'gpt-3.5-turbo-0613',
+  'gpt-3.5-turbo-16k' = 'gpt-3.5-turbo-16k',
+  'gpt-3.5-turbo-16k-0613' = 'gpt-3.5-turbo-16k-0613',
   'gpt-4' = 'gpt-4',
-  'gpt-4-0314' = 'gpt-4-0314',
+  'gpt-4-0613' = 'gpt-4-0613',
   'gpt-4-32k' = 'gpt-4-32k',
-  'gpt-4-32k-0314' = 'gpt-4-32k-0314',
+  'gpt-4-32k-0613' = 'gpt-4-32k-0613',
 }
+
+export const AllModels = [
+  Model['gpt-3.5-turbo'],
+  Model['gpt-3.5-turbo-0613'],
+  Model['gpt-3.5-turbo-16k'],
+  Model['gpt-3.5-turbo-16k-0613'],
+  Model['gpt-4'],
+  Model['gpt-4-0613'],
+  Model['gpt-4-32k'],
+  Model['gpt-4-32k-0613'],
+];
+
+export const MIN_TOKENS: Record<Model, number> = {
+  [Model['gpt-3.5-turbo']]: 1024,
+  [Model['gpt-3.5-turbo-0613']]: 1024,
+  [Model['gpt-3.5-turbo-16k']]: 1024,
+  [Model['gpt-3.5-turbo-16k-0613']]: 1024,
+  [Model['gpt-4']]: 1024,
+  [Model['gpt-4-0613']]: 1024,
+  [Model['gpt-4-32k']]: 1024,
+  [Model['gpt-4-32k-0613']]: 1024,
+};
+
+export const MAX_TOKENS: Record<Model, number> = {
+  [Model['gpt-3.5-turbo']]: 4096,
+  [Model['gpt-3.5-turbo-0613']]: 4096,
+  [Model['gpt-3.5-turbo-16k']]: 16384,
+  [Model['gpt-3.5-turbo-16k-0613']]: 16384,
+  [Model['gpt-4']]: 8192,
+  [Model['gpt-4-0613']]: 8192,
+  [Model['gpt-4-32k']]: 32768,
+  [Model['gpt-4-32k-0613']]: 32768,
+};
+
+export const TOKENS_STEP: Record<Model, number> = {
+  [Model['gpt-3.5-turbo']]: 512,
+  [Model['gpt-3.5-turbo-0613']]: 512,
+  [Model['gpt-3.5-turbo-16k']]: 1024,
+  [Model['gpt-3.5-turbo-16k-0613']]: 1024,
+  [Model['gpt-4']]: 1024,
+  [Model['gpt-4-0613']]: 1024,
+  [Model['gpt-4-32k']]: 1024,
+  [Model['gpt-4-32k-0613']]: 1024,
+};
 
 /**
  * 单条消息
@@ -114,7 +160,7 @@ export interface ChatRequest {
    */
   stop?: string | string[];
   /**
-   * 最大 token 数量
+   * tokens 限制
    */
   max_tokens?: number;
   /**
@@ -132,6 +178,8 @@ export interface ChatRequest {
    *
    * 用于惩罚模型生成频率较高的 token，从而使得生成的文本更加多样化。
    * 与 presence_penalty 相似，frequency_penalty 越高，模型生成的文本中就越不可能包含频率较高的 token。
+   *
+   * @default 0;
    */
   frequency_penalty?: number;
   /**
